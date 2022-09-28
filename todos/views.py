@@ -20,7 +20,10 @@ def index(request):
     else:
         total_tasks=Todo.objects.filter(created_by=request.user).count()
         completed = Todo.objects.filter(created_by=request.user, completed=True).count()
-        percent=completed/total_tasks*100
+        try:
+            percent=completed/total_tasks*100
+        except ZeroDivisionError:
+            percent=0
         todos = Todo.objects.filter(created_by=request.user)
         return render(request, 'todos/index.html', {'todos': todos, 'per':percent})
 
